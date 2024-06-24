@@ -39,7 +39,7 @@ const Fashion = () => {
             />
           </div>
           <h1 className="pt-3 whitespace-nowrap overflow-hidden text-ellipsis px-3 font-bold">
-            Nike Men's Air Jordan T-Shirt
+            Nike Mens Air Jordan T-Shirt
           </h1>
           <p className="text-blue-900 whitespace-nowrap overflow-hidden text-ellipsis px-3">
             100% Cotton Jordan Air Wordmark T-Shirt
@@ -61,7 +61,7 @@ const Fashion = () => {
             />
           </div>
           <h1 className="pt-3 whitespace-nowrap overflow-hidden text-ellipsis px-3 font-bold">
-            Nike Dri-Fit Short Sleeve Shirt Men's
+            Nike Dri-Fit Short Sleeve Shirt Mens
           </h1>
           <p className="text-blue-900 whitespace-nowrap overflow-hidden text-ellipsis px-3">
             Orange New with Tags
@@ -83,7 +83,7 @@ const Fashion = () => {
             />
           </div>
           <h1 className="pt-3 whitespace-nowrap overflow-hidden text-ellipsis px-3 font-bold">
-            Nike Men's Sportswear Active Short Sleeve T-Shirt
+            Nike Mens Sportswear Active Short Sleeve T-Shirt
           </h1>
           <p className="text-blue-900 whitespace-nowrap overflow-hidden text-ellipsis px-3">
             Black/White, AR5004-010
@@ -130,7 +130,7 @@ const Fashion = () => {
             UConn Huskies Nike Pro Dri-Fit
           </h1>
           <p className="text-blue-900 whitespace-nowrap overflow-hidden text-ellipsis px-3">
-            Sleeveless Shirt Men's Red New without Tags
+            Sleeveless Shirt Mens Red New without Tags
           </p>
           <p className="py-2 font-bold px-3">From Rs.500</p>
           <button className="bg-blue-900 font-bold text-white w-[96%] md:w-[92%] mx-auto p-2 mb-3">
@@ -174,7 +174,7 @@ const Fashion = () => {
             NWT Nike Medium Men Sportswear Tee Shirt{" "}
           </h1>
           <p className="text-blue-900 whitespace-nowrap overflow-hidden text-ellipsis px-3">
-            Loose Fit Full Sleeve with Drop Shoulder Round Neck Women's
+            Loose Fit Full Sleeve with Drop Shoulder Round Neck Womens
             Sweatshirt
           </p>
           <p className="py-2 font-bold px-3">From Rs.500</p>
