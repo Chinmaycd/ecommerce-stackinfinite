@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { FaSearch } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
+import { MdDelete } from "react-icons/md";
 
 import { BiUser } from "react-icons/bi";
 import { ImCross } from "react-icons/im";
@@ -101,7 +102,8 @@ const Header = () => {
               </p>
             </div>
             <div>
-              <span className="text-gray-500"></span>
+              <span className="text-gray-500"><MdDelete size={25} className="text-blue-900"/>
+</span>
             </div>
           </div>
           <div className="flex justify-between">
@@ -168,7 +170,7 @@ const Header = () => {
               </p>
             </div>
             <div>
-              <span className="text-gray-500"></span>
+              <span className="text-gray-500"><MdDelete size={25} className="text-blue-900"/></span>
             </div>
           </div>
           <div className="flex justify-between">
@@ -235,7 +237,7 @@ const Header = () => {
               </p>
             </div>
             <div>
-              <span className="text-gray-500"></span>
+              <span className="text-gray-500"><MdDelete size={25} className="text-blue-900"/></span>
             </div>
           </div>
           <div className="flex justify-between">
@@ -302,7 +304,7 @@ const Header = () => {
               </p>
             </div>
             <div>
-              <span className="text-gray-500"></span>
+              <span className="text-gray-500"><MdDelete size={25} className="text-blue-900"/></span>
             </div>
           </div>
           <div className="flex justify-between">
@@ -369,7 +371,7 @@ const Header = () => {
               </p>
             </div>
             <div>
-              <span className="text-gray-500"></span>
+              <span className="text-gray-500"><MdDelete size={25} className="text-blue-900"/></span>
             </div>
           </div>
           <div className="flex justify-between">
