@@ -5,9 +5,9 @@ const Fashion = () => {
 
   return (
     <div>
-      <div className="container sm:max-w-[90%] md:max-w-[80%] xl:max-w-[90%] 2xl:max-w-[80%] mx-auto grid lg:grid-cols-3 xl:grid-cols-4 md:grid-cols-2 gap-10 ">
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
-          <div className="w-full md:h-[250px] h-auto">
+      <div className="container sm:max-w-[90%] md:max-w-[80%] xl:max-w-[90%] 2xl:max-w-[80%] mx-auto grid lg:grid-cols-3 xl:grid-cols-4 md:grid-cols-2 gap-10 text-base md:text-lg">
+        <div className="flex flex-col font-sans overflow-hidden  md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+          <div className="w-full  h-auto">
             <Image
               src="/product-images/prod1.webp"
               alt="prod1"
@@ -28,7 +28,7 @@ const Fashion = () => {
           </button>
         </div>
 
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px] ">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px] ">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/prod2.webp"
@@ -50,7 +50,7 @@ const Fashion = () => {
           </button>
         </div>
 
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/prod3.webp"
@@ -72,7 +72,7 @@ const Fashion = () => {
           </button>
         </div>
 
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/prod4.webp"
@@ -94,7 +94,7 @@ const Fashion = () => {
           </button>
         </div>
 
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/prod5.webp"
@@ -116,7 +116,7 @@ const Fashion = () => {
           </button>
         </div>
 
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/prod6.webp"
@@ -138,7 +138,7 @@ const Fashion = () => {
           </button>
         </div>
 
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/prod7.webp"
@@ -160,7 +160,7 @@ const Fashion = () => {
           </button>
         </div>
 
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/prod8.webp"
@@ -182,7 +182,7 @@ const Fashion = () => {
             Add to Cart
           </button>
         </div>
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto ">
             <Image
               src="/product-images/e1.webp"
@@ -204,7 +204,7 @@ const Fashion = () => {
           </button>
         </div>
 
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/e2.webp"
@@ -226,7 +226,7 @@ const Fashion = () => {
           </button>
         </div>
 
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/e3.webp"
@@ -248,7 +248,7 @@ const Fashion = () => {
           </button>
         </div>
 
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/e4.webp"
@@ -269,7 +269,7 @@ const Fashion = () => {
             Add to Cart
           </button>
         </div>
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/toy1.webp"
@@ -291,7 +291,7 @@ const Fashion = () => {
           </button>
         </div>
 
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/toy2.webp"
@@ -313,7 +313,7 @@ const Fashion = () => {
           </button>
         </div>
 
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/j1.webp"
@@ -335,7 +335,7 @@ const Fashion = () => {
           </button>
         </div>
 
-        <div className="flex flex-col font-sans overflow-hidden md:h-[400px] md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
+        <div className="flex flex-col font-sans overflow-hidden text-base md:text-lg md:w-[260px] h-auto w-[90%] mx-auto shadow-[0_2px_10px_-5px]">
           <div className="w-full md:h-[250px] h-auto">
             <Image
               src="/product-images/j2.webp"
