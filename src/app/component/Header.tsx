@@ -1,30 +1,110 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaSearch } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
-
 import { BiUser } from "react-icons/bi";
 import { ImCross } from "react-icons/im";
 import { IoSearch } from "react-icons/io5";
-import SearchModal from "./Product/SearchModal";
-
+import SearchModal from "./SearchModal";
+import { useRouter } from "next/navigation";
+import Cookies from "universal-cookie";
+import axios from "axios";
+import API_BASE_URL from "@/Apiconfig";
+import { FaRegHeart } from "react-icons/fa";
 const Header = () => {
+  const router = useRouter();
   const [cartOpen, setCartOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false); // State for modal open/close
-
+  const [cartdata, setCartdata] = useState([]);
+  const [totalprice, setTotalprice] = useState();
+  const [decr, setDecr] = useState();
+  const [incr, setIncr] = useState();
+  const cookies = new Cookies();
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
-
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const fetchData = () => {
+    let userID = cookies.get("userid");
+    // console.log(userID); // Check userID in console
+    let url = `${API_BASE_URL}/carts/products/${userID}`;
+    axios
+      .get(url)
+      .then((response) => {
+        setCartdata(response.data.carts);
+        setTotalprice(response.data.totalPrice);
+        // console.log(response.data.totalPrice); // Log response data to check structure
+      })
+      .catch((error) => {
+        console.log(error); // Log any errors for debugging
+      });
+  };
+  // console.log(cartdata);
+  //delete from cart api
+  const deletecartAPI = (productID: any) => {
+    let url = `${API_BASE_URL}/carts/delete/${productID}`;
+    let userid = cookies.get("userid");
+    axios
+      .delete(url, { data: { userId: userid } })
+      .then((response) => {
+        // Filter out the deleted item from cartdata
+        const updatedCart = cartdata.filter(
+          (item: any) => item.productId !== productID
+        );
+        setCartdata(updatedCart); // Update cartdata state without the deleted item
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  //decrement api
+  const handleDecrement = (productId: any) => {
+    let url = `${API_BASE_URL}/carts/decrease/${productId}`;
+    let userid = cookies.get("userid");
+    axios
+      .put(url, { userId: userid } )
+      .then((response) => {
+        setDecr(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+   //increment api
+   const handleIncrement = (productId: any) => {
+    let url = `${API_BASE_URL}/carts/increase/${productId}`;
+    let userid = cookies.get("userid");
+    axios
+      .put(url, { userId: userid } )
+      .then((response) => {
+        setIncr(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  function Logout() {
+    router.push("/");
+    cookies.remove("loggedin");
+    cookies.remove("userid");
+  }
+  // Calculate total quantity of items in the cart
+  const getTotalQuantity = () => {
+    return cartdata.reduce((total, item: any) => total + item.quantity, 0);
+  };
   return (
     <div className=" shadow-md font-sans">
       {cartOpen && (
         <div className="fixed inset-0  z-50 backdrop-brightness-50"></div>
       )}
-{/* Pass modal state and close function to SearchModal */}
-<SearchModal isOpen={modalOpen} onClose={closeModal}/>
-      <div className="w-[100%] flex justify-between items-center px-6 md:px-10 ">
+      {/* Pass modal state and close function to SearchModal */}
+      <SearchModal isOpen={modalOpen} onClose={closeModal} />
+      <div className="w-[100%] flex justify-between items-center px-4 md:px-10 ">
         <div className="flex gap-3 items-center">
           <Image src="/logo.jpg" height={64} width={64} alt="logo" />
         </div>
@@ -35,7 +115,7 @@ const Header = () => {
             placeholder="Search for Products"
             className="lg:w-[600px] sm:w-[400px] md:w-[500px] py-1 px-5 border border-gray-200 rounded sm:block hidden"
           />
-          <FaSearch className="absolute top-0 right-0 mr-3 mt-2 text-blue-900 sm:block hidden" />
+          <FaSearch className="absolute top-0 right-0 mr-3 mt-2 text-blue-900 sm:block hidden " />
         </div>
 
         <div className="flex items-center justify-start sm:hidden  pr-14 font-bold">
@@ -49,11 +129,24 @@ const Header = () => {
           <span>
             <IoSearch
               size={24}
-              className=" text-blue-900 block sm:hidden font-bold"
-              onClick={openModal}             />
+              className=" text-blue-900 block sm:hidden font-bold cursor-pointer"
+              onClick={openModal}
+            />
           </span>
           <span>
-            <BiUser size={25} className="text-blue-900 cursor-pointer " />
+          <FaRegHeart 
+           size={22}
+           className=" text-red-600 block font-bold cursor-pointer"
+           onClick={()=>router.push("/wishlist")}
+          />
+
+          </span>
+          <span>
+            <BiUser
+              size={25}
+              className="text-blue-900 cursor-pointer"
+              onClick={Logout}
+            />
           </span>
           <span>
             <FaCartShopping
@@ -61,10 +154,13 @@ const Header = () => {
               size={25}
               className="text-blue-900 cursor-pointer"
             />
+            {cartdata.length > 0 && (
+              <span className="absolute top-2 right-3 md:right-9 bg-orange-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+                {getTotalQuantity()}
+              </span>
+            )}
           </span>
         </div>
-
-          
       </div>
 
       {/* Cart sidebar */}
@@ -82,342 +178,83 @@ const Header = () => {
           </span>
         </div>
         {/* cart body */}
-        <div className="py-10 border-b border-gray-500">
-          <div className="flex justify-between gap-2">
-            <div className="h-[80px] w-[80px] border border-gray-500 p-1 ">
-              <Image
-                src="/product-images/prod1.jpg"
-                alt="img"
-                height={200}
-                width={200}
-                className="h-full"
-              />
-            </div>
-            <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-              <h1 className=" text-blue-900 font-bold whitespace-nowrap overflow-hidden text-ellipsis">
-                Nike Air Jordan Men Cotton T shirt
-              </h1>
-              <p className="text-gray-500 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
-                Graphic Logo Crew Black Tshirt Tee S M L XL
-              </p>
-            </div>
-            <div>
-              <span className="text-gray-500"><MdDelete size={25} className="text-blue-900"/>
-</span>
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div className="">
-              <div className="flex divide-x border w-max mt-4 rounded overflow-hidden">
-                <button
-                  type="button"
-                  className="bg-gray-100 w-12 h-8 font-semibold"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3 fill-current inline"
-                    viewBox="0 0 124 124"
-                  >
-                    <path
-                      d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
-                      data-original="#000000"
-                    ></path>
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className="bg-transparent w-12 h-8 font-semibold text-gray-800 text-lg"
-                >
-                  1
-                </button>
-                <button
-                  type="button"
-                  className="bg-gray-800 text-white w-12 h-8 font-semibold"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3 fill-current inline"
-                    viewBox="0 0 42 42"
-                  >
-                    <path
-                      d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
-                      data-original="#000000"
-                    ></path>
-                  </svg>
-                </button>
+        {cartdata.map((item: any, i: any) => (
+          <div className="py-10 border-b border-gray-500" key={i}>
+            <div className="flex justify-between gap-2">
+              <div className="h-[80px] w-[80px] border border-gray-500 p-1 ">
+                <img
+                  src={item.images[0]? item.images[0] : "no-img.jpg"}
+                  alt="img"
+                  height={200}
+                  width={200}
+                  className="h-full"
+                />
+              </div>
+              <div className="whitespace-nowrap overflow-hidden text-ellipsis">
+                <h1 className=" text-blue-900 font-bold whitespace-nowrap overflow-hidden text-ellipsis">
+                  {item.name}
+                </h1>
+                {/* <p className="text-gray-500 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+               Graphic Logo Crew Black Tshirt Tee S M L XL
+             </p> */}
+              </div>
+              <div>
+                <span className="text-gray-500">
+                  <MdDelete
+                    size={25}
+                    className="text-blue-900"
+                    onClick={() => deletecartAPI(item.productId)}
+                  />
+                </span>
               </div>
             </div>
-            <div className="mt-5 text-orange-500">Rs.500</div>
-          </div>
-        </div>
-        <div className="py-10 border-b border-gray-500">
-          <div className="flex justify-between gap-2">
-            <div className="h-[80px] w-[80px] border border-gray-500 p-1 ">
-              <Image
-                src="/product-images/prod1.jpg"
-                alt="img"
-                height={200}
-                width={200}
-                className="h-full"
-              />
-            </div>
-            <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-              <h1 className=" text-blue-900 font-bold whitespace-nowrap overflow-hidden text-ellipsis">
-                Nike Air Jordan Men Cotton T shirt
-              </h1>
-              <p className="text-gray-500 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
-                Graphic Logo Crew Black Tshirt Tee S M L XL
-              </p>
-            </div>
-            <div>
-              <span className="text-gray-500"><MdDelete size={25} className="text-blue-900"/></span>
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div className="">
-              <div className="flex divide-x border w-max mt-4 rounded overflow-hidden">
-                <button
-                  type="button"
-                  className="bg-gray-100 w-12 h-8 font-semibold"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3 fill-current inline"
-                    viewBox="0 0 124 124"
+            <div className="flex justify-between">
+              <div className="">
+                <div className="flex divide-x border w-max mt-4 rounded overflow-hidden">
+                  <button
+                    onClick={() => handleDecrement(item.productId)}
+                    type="button"
+                    className="bg-gray-100 w-12 h-8 font-semibold"
                   >
-                    <path
-                      d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
-                      data-original="#000000"
-                    ></path>
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className="bg-transparent w-12 h-8 font-semibold text-gray-800 text-lg"
-                >
-                  1
-                </button>
-                <button
-                  type="button"
-                  className="bg-gray-800 text-white w-12 h-8 font-semibold"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3 fill-current inline"
-                    viewBox="0 0 42 42"
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-3 fill-current inline"
+                      viewBox="0 0 124 124"
+                    >
+                      <path
+                        d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
+                        data-original="#000000"
+                      ></path>
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    className="bg-transparent w-12 h-8 font-semibold text-gray-800 text-lg"
                   >
-                    <path
-                      d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
-                      data-original="#000000"
-                    ></path>
-                  </svg>
-                </button>
+                    {item.quantity}
+                  </button>
+                  <button
+                   onClick={() => handleIncrement(item.productId)}
+                    type="button"
+                    className="bg-gray-800 text-white w-12 h-8 font-semibold"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-3 fill-current inline"
+                      viewBox="0 0 42 42"
+                    >
+                      <path
+                        d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
+                        data-original="#000000"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className="mt-5 text-orange-500">Rs.500</div>
-          </div>
-        </div>
-        <div className="py-10 border-b border-gray-500">
-          <div className="flex justify-between gap-2">
-            <div className="h-[80px] w-[80px] border border-gray-500 p-1 ">
-              <Image
-                src="/product-images/prod1.jpg"
-                alt="img"
-                height={200}
-                width={200}
-                className="h-full"
-              />
-            </div>
-            <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-              <h1 className=" text-blue-900 font-bold whitespace-nowrap overflow-hidden text-ellipsis">
-                Nike Air Jordan Men Cotton T shirt
-              </h1>
-              <p className="text-gray-500 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
-                Graphic Logo Crew Black Tshirt Tee S M L XL
-              </p>
-            </div>
-            <div>
-              <span className="text-gray-500"><MdDelete size={25} className="text-blue-900"/></span>
+              <div className="mt-5 text-orange-500">₹ {item.price * item.quantity}</div>
             </div>
           </div>
-          <div className="flex justify-between">
-            <div className="">
-              <div className="flex divide-x border w-max mt-4 rounded overflow-hidden">
-                <button
-                  type="button"
-                  className="bg-gray-100 w-12 h-8 font-semibold"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3 fill-current inline"
-                    viewBox="0 0 124 124"
-                  >
-                    <path
-                      d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
-                      data-original="#000000"
-                    ></path>
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className="bg-transparent w-12 h-8 font-semibold text-gray-800 text-lg"
-                >
-                  1
-                </button>
-                <button
-                  type="button"
-                  className="bg-gray-800 text-white w-12 h-8 font-semibold"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3 fill-current inline"
-                    viewBox="0 0 42 42"
-                  >
-                    <path
-                      d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
-                      data-original="#000000"
-                    ></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div className="mt-5 text-orange-500">Rs.500</div>
-          </div>
-        </div>
-        <div className="py-10 border-b border-gray-500">
-          <div className="flex justify-between gap-2">
-            <div className="h-[80px] w-[80px] border border-gray-500 p-1 ">
-              <Image
-                src="/product-images/prod1.jpg"
-                alt="img"
-                height={200}
-                width={200}
-                className="h-full"
-              />
-            </div>
-            <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-              <h1 className=" text-blue-900 font-bold whitespace-nowrap overflow-hidden text-ellipsis">
-                Nike Air Jordan Men Cotton T shirt
-              </h1>
-              <p className="text-gray-500 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
-                Graphic Logo Crew Black Tshirt Tee S M L XL
-              </p>
-            </div>
-            <div>
-              <span className="text-gray-500"><MdDelete size={25} className="text-blue-900"/></span>
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div className="">
-              <div className="flex divide-x border w-max mt-4 rounded overflow-hidden">
-                <button
-                  type="button"
-                  className="bg-gray-100 w-12 h-8 font-semibold"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3 fill-current inline"
-                    viewBox="0 0 124 124"
-                  >
-                    <path
-                      d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
-                      data-original="#000000"
-                    ></path>
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className="bg-transparent w-12 h-8 font-semibold text-gray-800 text-lg"
-                >
-                  1
-                </button>
-                <button
-                  type="button"
-                  className="bg-gray-800 text-white w-12 h-8 font-semibold"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3 fill-current inline"
-                    viewBox="0 0 42 42"
-                  >
-                    <path
-                      d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
-                      data-original="#000000"
-                    ></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div className="mt-5 text-orange-500">Rs.500</div>
-          </div>
-        </div>
-        <div className="py-10 border-b border-gray-500">
-          <div className="flex justify-between gap-2">
-            <div className="h-[80px] w-[80px] border border-gray-500 p-1 ">
-              <Image
-                src="/product-images/prod2.webp"
-                alt="img"
-                height={200}
-                width={200}
-                className="h-full"
-              />
-            </div>
-            <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-              <h1 className=" text-blue-900 font-bold whitespace-nowrap overflow-hidden text-ellipsis">
-                Nike Air Jordan Men Cotton T shirt
-              </h1>
-              <p className="text-gray-500 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
-                Graphic Logo Crew Black Tshirt Tee S M L XL
-              </p>
-            </div>
-            <div>
-              <span className="text-gray-500"><MdDelete size={25} className="text-blue-900"/></span>
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div className="">
-              <div className="flex divide-x border w-max mt-4 rounded overflow-hidden">
-                <button
-                  type="button"
-                  className="bg-gray-100 w-12 h-8 font-semibold"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3 fill-current inline"
-                    viewBox="0 0 124 124"
-                  >
-                    <path
-                      d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
-                      data-original="#000000"
-                    ></path>
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className="bg-transparent w-12 h-8 font-semibold text-gray-800 text-lg"
-                >
-                  1
-                </button>
-                <button
-                  type="button"
-                  className="bg-gray-800 text-white w-12 h-8 font-semibold"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3 fill-current inline"
-                    viewBox="0 0 42 42"
-                  >
-                    <path
-                      d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
-                      data-original="#000000"
-                    ></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div className="mt-5 text-orange-500">Rs.500</div>
-          </div>
-        </div>
+        ))}
         <div className=" py-5 flex justify-between border-b border-gray-500">
           <h1 className=" text-blue-900 font-bold whitespace-nowrap overflow-hidden text-ellipsis">
             {" "}
@@ -425,7 +262,7 @@ const Header = () => {
           </h1>
           <h1 className=" text-orange-500 font-bold whitespace-nowrap overflow-hidden text-ellipsis">
             {" "}
-            Rs.1000
+            ₹ {totalprice}
           </h1>
         </div>
         <div className="py-5">
