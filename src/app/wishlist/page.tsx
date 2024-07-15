@@ -4,18 +4,19 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Triangle } from "react-loader-spinner";
 import Cookies from "universal-cookie";
-import Header from "../component/Header";
+import Header from "../common-component/Header";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 export default function Wishlist() {
   const [isLoading, setLoading] = useState(false);
   const [wishlist, setWishlist] = useState([]);
+  const[data,setData]=useState([])
   const[apidata,setApidata]=useState([])
   let cookies = new Cookies();
   //get wishlist api
   useEffect(() => {
     getwishlistAPI();
-    
+    fetchData()
   }, []);
   //get wishlist api
   const getwishlistAPI = () => {
@@ -35,7 +36,7 @@ export default function Wishlist() {
         console.log(error);
       });
   };
-  // console.log(wishlist);
+  console.log(wishlist);
  //remove wishlist api
  const removewishlistAPI = (productId:string) => {
   let url = `${API_BASE_URL}/wishlist/remove`;
@@ -43,14 +44,17 @@ export default function Wishlist() {
   setLoading(true);
   let userId=cookies.get('userid');
   axios
-    .delete(url,{data:{userId:userId,productId:productId}}) //also add quantity
+    .delete(url,{data:{userId:userId,productId:productId}}) 
     .then((response: any) => {
       // Filter out the deleted item from cartdata
       const updatedCart = wishlist.filter(
         (item: any) => item._id !== productId
     )
     setLoading(false)
-    setWishlist(updatedCart)
+     // Update localStorage to reflect the changes
+     localStorage.setItem("wishlist", JSON.stringify(updatedCart));
+     setWishlist(updatedCart);
+    
   })
     .catch((error: any) => {
       console.log(error);
@@ -74,9 +78,27 @@ export default function Wishlist() {
         console.log(error);
       });   
   };
+   // Fetch product data for out of stock product show
+   const fetchData = () => {
+    setLoading(true);
+    let url = `${API_BASE_URL}/products`;
+    axios
+      .get(url)
+      .then((response) => {
+        setData(response.data.products);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  };
+    // Handle image loading error
+    const handleImageError = (e: React.ChangeEvent<HTMLImageElement>) => {
+      e.currentTarget.src = "/no-img.jpg"; // Set default image path on error
+    };
   return (
     <div>
-      <Header/>
       {isLoading && (
       <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
       <Triangle
@@ -100,8 +122,9 @@ export default function Wishlist() {
             <div className="bg-white shadow-[0_2px_10px_-5px] rounded-lg overflow-hidden p-3">
              <div className="md:h-[400px]">
              <img
-                src={item.images}
+                src={item.images[0]}
                 alt={item.name}
+                onError={handleImageError}
                 className="w-full h-full object-contain"
               />
              </div>
@@ -110,11 +133,17 @@ export default function Wishlist() {
                 <p className="text-gray-700 text-sm">₹ {item.price}</p>
               </div>
              <div className="flex gap-3 px-3">
+             {item.outOfStock?
              <button 
-              onClick={()=>cartAPI(item._id)}
-              className="block w-full text-center py-2 px-4 bg-blue-900 text-white font-semibold uppercase hover:bg-blue-950 rounded">
-                Add to cart
-              </button>
+             onClick={()=>cartAPI(item._id)}
+             className="block w-full text-center py-2 px-4 bg-gray-500 text-white font-semibold uppercase  rounded" disabled>
+               Out of stock
+             </button>:
+             <button 
+             onClick={()=>cartAPI(item._id)}
+             className="block w-full text-center py-2 px-4 bg-blue-900 text-white font-semibold uppercase hover:bg-blue-950 rounded">
+               Add to cart
+             </button>}
               {/* <button className="block w-full text-center py-2 px-4 bg-red-500 text-white font-semibold uppercase hover:bg-red-600" >
                 Remove
               </button> */}

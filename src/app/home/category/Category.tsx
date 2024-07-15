@@ -16,7 +16,7 @@ const Category = ({ onSelectCategory }:any) => {
       .get(`${API_BASE_URL}/categories`)
       .then((response) => {
         setData(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
         console.log(error);

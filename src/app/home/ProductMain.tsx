@@ -1,6 +1,6 @@
+'use client'
 import React, { useState } from "react";
-import Image from "next/image";
-import Category from "./Category";
+import Category from "./category/Category";
 import Fashion from "../product/page";
 
 const ProductMain = () => {
