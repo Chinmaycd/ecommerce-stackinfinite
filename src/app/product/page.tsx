@@ -20,6 +20,7 @@ const Fashion = ({ categoryId }: any) => {
   const [isLoading, setLoading] = useState(false);
   const cookies = new Cookies();
   const [data, setData] = useState<Product[]>([]);
+  const[cartdata,setCatrdata]=useState([])
   const [wishdata, setWishdata] = useState<string[]>([]); // Store IDs of wished products
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -65,6 +66,9 @@ const Fashion = ({ categoryId }: any) => {
       .post(url, { userId })
       .then((response) => {
         // Handle response as needed
+        setCatrdata(response.data)
+        console.log(response.data);
+        
         setLoading(false);
       })
       .catch((error) => {

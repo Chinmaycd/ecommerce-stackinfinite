@@ -40,8 +40,7 @@ import { usePathname } from "next/navigation";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "./common-component/Header";
-import { Provider } from "react-redux";
-import { store } from "@/redux/store";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -54,17 +53,17 @@ export default function RootLayout({
   const pathname = usePathname();
 
   // condition layout - Pathname - Array
-  const display: any = ["/", "/SignUp"];
+  const display: any = ["/", "/signup"];
 
   return (
     <html lang="en">
       <body className={inter.className}>
-      <Provider store={store()}>
+   
           {/* Condition for display Header */}
           {display.includes(pathname) ? null : <Header />}
     
     {children}
-      </Provider>
+     
       </body>
     </html>
   );

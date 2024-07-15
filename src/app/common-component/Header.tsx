@@ -28,14 +28,15 @@ const Header = () => {
     fetchData();
   }, []);
   const fetchData = () => {
-    let userID = cookies.get("userid");
+    let userId = cookies.get("userid");
     // console.log(userID); // Check userID in console
-    let url = `${API_BASE_URL}/carts/products/${userID}`;
+    let url = `${API_BASE_URL}/carts/products/${userId}`;
     axios
       .get(url)
       .then((response) => {
         setCartdata(response.data.carts);
         setTotalprice(response.data.totalPrice);
+        console.log(response.data);
         // console.log(response.data.totalPrice); // Log response data to check structure
       })
       .catch((error) => {
@@ -194,7 +195,7 @@ const Header = () => {
               </div>
               <div className="whitespace-nowrap overflow-hidden text-ellipsis">
                 <h1 className=" text-blue-900 font-bold whitespace-nowrap overflow-hidden text-ellipsis">
-                  {item.name}
+                  {/* {item.name} */}
                 </h1>
                 {/* <p className="text-gray-500 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
                Graphic Logo Crew Black Tshirt Tee S M L XL
