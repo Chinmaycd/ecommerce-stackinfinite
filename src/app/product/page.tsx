@@ -55,6 +55,7 @@ const Fashion = ({ categoryId }: any) => {
         setLoading(false);
       });
   };
+  console.log(data,"data");
   
   // Add product to cart
   const cartAPI = (productId: string) => {
