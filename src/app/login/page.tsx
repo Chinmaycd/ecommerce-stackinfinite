@@ -42,14 +42,7 @@ const handleToggle = () => {
      setType('password')
   }
 }
-// useEffect(() => {
-//   const verify = cookies.get('loggedin');
-//   console.log(verify);
-  
-//  if(verify===true){
-//     router.push('/home')
-//   }
-// }, []);
+
    // Validation function for form fields
    const validate = (values: FormData) => {
     const errors: Partial<FormData> = {};

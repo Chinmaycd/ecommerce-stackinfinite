@@ -60,6 +60,8 @@ const Header = () => {
         console.log(error);
       });
   };
+  // console.log(cartdata);
+  
   //decrement api
   const handleDecrement = (productId: any) => {
     let url = `${API_BASE_URL}/carts/decrease/${productId}`;
@@ -68,7 +70,7 @@ const Header = () => {
       .put(url, { userId: userid } )
       .then((response) => {
         setDecr(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -82,7 +84,7 @@ const Header = () => {
       .put(url, { userId: userid } )
       .then((response) => {
         setIncr(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
         console.log(error);

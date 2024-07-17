@@ -4,7 +4,6 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 interface IAddState {
   card: Number;
 }
-
 // Define the initial state using that type
 const initialState: IAddState = {
   card: 0,
@@ -15,7 +14,7 @@ export const essaySlice = createSlice({
   initialState,
   reducers: {
     // This state is for demo purpose
-    setAdd: (state, action: PayloadAction<Number>) => {
+    setAdd: (state:any, action: PayloadAction<Number>) => {
       state.card = action.payload;
     },
   },
