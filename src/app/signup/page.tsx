@@ -105,8 +105,6 @@ export default function Signup() {
       }
     },
   });
-
-  // JSX rendering
   return (
     <div className="h-[100vh] flex justify-center items-center bg-blue-950">
       {isLoading && (

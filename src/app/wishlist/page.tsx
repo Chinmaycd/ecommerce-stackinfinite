@@ -14,7 +14,7 @@ export default function Wishlist() {
   let cookies = new Cookies();
   const dispatch = useDispatch<any>();
   const wish = useSelector((state: RootState) => state.wish.wish);
-  const { status, removing, error ,addingToCart} = useSelector(
+  const { status, removing} = useSelector(
     (state: RootState) => state.wish
   );
   //get wishlist products
@@ -35,7 +35,7 @@ const cartAPI = (productId:string) => {
   };
   return (
     <div>
-      {status === "loading" || removing || addingToCart ? (
+      {status === "loading" || removing  ? (
         <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
           <Triangle
             visible={true}
@@ -50,7 +50,7 @@ const cartAPI = (productId:string) => {
         Wishlist
       </h1>
       <div className="flex flex-wrap justify-start">
-        {wish?.wishList?.products.map((item: any, i: number) => (
+        {wish.products.map((item: any, i: number) => (
           <div key={i} className="max-w-screen-lg w-full md:w-1/2 lg:w-1/3 p-4">
             <div className="bg-white shadow-[0_2px_10px_-5px] rounded-lg overflow-hidden p-3">
               <div className="md:h-[400px]">

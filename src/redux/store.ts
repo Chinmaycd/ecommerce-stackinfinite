@@ -4,6 +4,9 @@ import authSlice from "./features/authSlice";
 import categoriesSlice from "./features/categoriesSlice";
 import productSlice from "./features/productSlice";
 import addWishlistSlice from "./features/addWishlistSlice";
+import cartSlice from "./features/cartSlice";
+
+
 export const store = () => {
   return configureStore({
     reducer: {
@@ -12,7 +15,10 @@ export const store = () => {
       categories: categoriesSlice,
       products:productSlice,
       addwishlist:addWishlistSlice,
+      cart:cartSlice,
+      
     },
+    
   });
 };
 

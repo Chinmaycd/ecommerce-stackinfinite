@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import API_BASE_URL from '@/Apiconfig';
 import Cookies from 'universal-cookie';
+import { fetchCartdata } from './cartSlice';
 
 interface WishlistItem {
   _id: string;
@@ -12,7 +13,9 @@ interface WishlistItem {
 }
 
 interface WishlistState {
-  wish: WishlistItem[];
+  wish:  {
+    products: WishlistItem[];
+  };
   status: 'idle' | 'loading' | 'failed';
   error: string | null;
   removing: boolean;
@@ -20,7 +23,9 @@ interface WishlistState {
 }
 
 const initialState: WishlistState = {
-  wish: [],
+  wish: {
+    products: [],
+  },
   status: 'idle',
   error: null,
   removing: false,
@@ -35,8 +40,8 @@ export const fetchWishlist = createAsyncThunk<WishlistItem[]>(
     let userId = cookies.get("userid");
     let url = `${API_BASE_URL}/wishlist/${userId}`;
     try {
-      const response = await axios.get<WishlistItem[]>(url);
-      return response.data;
+      const response = await axios.get<any>(url); // Use any type for response
+      return response.data.wishList.products; // Extract products array
     } catch (error) {
       throw new Error('Failed to fetch wishlist');
     }
@@ -65,6 +70,7 @@ export const addToCart = createAsyncThunk<void, string>(
       let url = `${API_BASE_URL}/carts/add/${productId}`;
       await axios.post(url,{ userId }); // Changed to params
       thunkAPI.dispatch(fetchWishlist());
+      thunkAPI.dispatch(fetchCartdata());
     } catch (error) {
       throw new Error('Failed to add product to cart');
     }
@@ -83,7 +89,7 @@ const wishlistSlice = createSlice({
       })
       .addCase(fetchWishlist.fulfilled, (state, action: PayloadAction<WishlistItem[]>) => {
         state.status = 'idle';
-        state.wish = action.payload;
+        state.wish.products = action.payload;
       })
       .addCase(fetchWishlist.rejected, (state, action) => {
         state.status = 'failed';

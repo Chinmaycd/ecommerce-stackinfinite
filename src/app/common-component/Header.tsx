@@ -13,6 +13,9 @@ import Cookies from "universal-cookie";
 import axios from "axios";
 import API_BASE_URL from "@/Apiconfig";
 import { FaRegHeart } from "react-icons/fa";
+import { decrementCartItem, deleteCartItem, fetchCartdata, incrementCartItem } from "@/redux/features/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 const Header = () => {
   const router = useRouter();
   const [cartOpen, setCartOpen] = useState(false);
@@ -24,71 +27,30 @@ const Header = () => {
   const cookies = new Cookies();
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
+  const dispatch = useDispatch<any>();
+  const cart = useSelector((state:RootState)=>state.cart.cart)
+   const totalPrice = useSelector((state: RootState) => state.cart.totalPrice);
+  // console.log(cart);
+  
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [dispatch]);
   const fetchData = () => {
-    let userID = cookies.get("userid");
-    // console.log(userID); // Check userID in console
-    let url = `${API_BASE_URL}/carts/products/${userID}`;
-    axios
-      .get(url)
-      .then((response) => {
-        setCartdata(response.data.carts);
-        setTotalprice(response.data.totalPrice);
-        // console.log(response.data.totalPrice); // Log response data to check structure
-      })
-      .catch((error) => {
-        console.log(error); // Log any errors for debugging
-      });
+    dispatch(fetchCartdata())
   };
   // console.log(cartdata);
   //delete from cart api
-  const deletecartAPI = (productID: any) => {
-    let url = `${API_BASE_URL}/carts/delete/${productID}`;
-    let userid = cookies.get("userid");
-    axios
-      .delete(url, { data: { userId: userid } })
-      .then((response) => {
-        // Filter out the deleted item from cartdata
-        const updatedCart = cartdata.filter(
-          (item: any) => item.productId !== productID
-        );
-        setCartdata(updatedCart); // Update cartdata state without the deleted item
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const deletecartAPI = (productId: any) => {
+    dispatch(deleteCartItem(productId));
   };
-  // console.log(cartdata);
   
   //decrement api
   const handleDecrement = (productId: any) => {
-    let url = `${API_BASE_URL}/carts/decrease/${productId}`;
-    let userid = cookies.get("userid");
-    axios
-      .put(url, { userId: userid } )
-      .then((response) => {
-        setDecr(response.data);
-        // console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    dispatch(decrementCartItem(productId));
   };
    //increment api
    const handleIncrement = (productId: any) => {
-    let url = `${API_BASE_URL}/carts/increase/${productId}`;
-    let userid = cookies.get("userid");
-    axios
-      .put(url, { userId: userid } )
-      .then((response) => {
-        setIncr(response.data);
-        // console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    dispatch(incrementCartItem(productId));
   };
   function Logout() {
     router.push("/");
@@ -97,7 +59,7 @@ const Header = () => {
   }
   // Calculate total quantity of items in the cart
   const getTotalQuantity = () => {
-    return cartdata.reduce((total, item: any) => total + item.quantity, 0);
+    return cart.reduce((total, item: any) => total + item.quantity, 0);
   };
   return (
     <div className=" shadow-md font-sans">
@@ -156,7 +118,7 @@ const Header = () => {
               size={25}
               className="text-blue-900 cursor-pointer"
             />
-            {cartdata.length > 0 && (
+            {cart.length > 0 && (
               <span className="absolute top-2 right-3 md:right-9 bg-orange-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
                 {getTotalQuantity()}
               </span>
@@ -180,7 +142,7 @@ const Header = () => {
           </span>
         </div>
         {/* cart body */}
-        {cartdata.map((item: any, i: any) => (
+        {cart.map((item: any, i: any) => (
           <div className="py-10 border-b border-gray-500" key={i}>
             <div className="flex justify-between gap-2">
               <div className="h-[80px] w-[80px] border border-gray-500 p-1 ">
@@ -217,6 +179,7 @@ const Header = () => {
                     onClick={() => handleDecrement(item.productId)}
                     type="button"
                     className="bg-gray-100 w-12 h-8 font-semibold"
+                    disabled={item.quantity === 1}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -264,7 +227,7 @@ const Header = () => {
           </h1>
           <h1 className=" text-orange-500 font-bold whitespace-nowrap overflow-hidden text-ellipsis">
             {" "}
-            ₹ {totalprice}
+            ₹ {totalPrice}
           </h1>
         </div>
         <div className="py-5">
