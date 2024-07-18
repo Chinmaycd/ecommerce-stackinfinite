@@ -36,7 +36,7 @@ export default function Wishlist() {
         console.log(error);
       });
   };
-  console.log(wishlist);
+  // console.log(wishlist,'wis');
  //remove wishlist api
  const removewishlistAPI = (productId:string) => {
   let url = `${API_BASE_URL}/wishlist/remove`;
