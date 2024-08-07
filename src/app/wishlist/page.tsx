@@ -10,32 +10,50 @@ import {
   fetchWishlist,
   removeWishlistItem,
 } from "@/redux/features/wishlistSlice";
+
 export default function Wishlist() {
   let cookies = new Cookies();
   const dispatch = useDispatch<any>();
   const wish = useSelector((state: RootState) => state.wish.wish);
-  const { status, removing} = useSelector(
-    (state: RootState) => state.wish
-  );
-  //get wishlist products
+  const { status, removing } = useSelector((state: RootState) => state.wish);
+
+  // Fetch wishlist products on component mount
   useEffect(() => {
     dispatch(fetchWishlist());
   }, [dispatch]);
-  // remove wishlist
+
+  // Remove item from wishlist and also remove from local storage
   const removewishlistAPI = (productId: string) => {
+    // Remove from local storage
+    removeFromLocalStorage(productId);
+    // Dispatch action to remove from Redux store
     dispatch(removeWishlistItem(productId));
   };
-  //add to cart
-const cartAPI = (productId:string) => {
-  dispatch(addToCart(productId))
-}
+// storing productid in localstorage according to userid 
+const userId = cookies.get("userid");
+const localStorageKey = userId ? `wishlist_${userId}` : "wishlist";
+ // Remove item from local storage
+const removeFromLocalStorage = (productId: string) => {
+  const storedWishlist = localStorage.getItem(`wishlist_${userId}` );
+  if (storedWishlist) {
+    const wishlist = JSON.parse(storedWishlist) as string[];
+    const updatedWishlist = wishlist.filter((id) => id !== productId);
+    localStorage.setItem(`wishlist_${userId}` , JSON.stringify(updatedWishlist));
+  }
+};
+  // Add to cart action
+  const cartAPI = (productId: string) => {
+    dispatch(addToCart(productId));
+  };
+
   // Handle image loading error
   const handleImageError = (e: React.ChangeEvent<HTMLImageElement>) => {
     e.currentTarget.src = "/no-img.jpg"; // Set default image path on error
   };
+
   return (
     <div>
-      {status === "loading" || removing  ? (
+      {status === "loading" || removing ? (
         <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
           <Triangle
             visible={true}
@@ -69,7 +87,7 @@ const cartAPI = (productId:string) => {
                 {item.outOfStock ? (
                   <button
                     onClick={() => cartAPI(item._id)}
-                    className="block w-full text-center py-2 px-4 bg-gray-500 text-white font-semibold uppercase  rounded"
+                    className="block w-full text-center py-2 px-4 bg-gray-500 text-white font-semibold uppercase rounded"
                     disabled
                   >
                     Out of stock
@@ -86,7 +104,7 @@ const cartAPI = (productId:string) => {
                   <RiDeleteBin6Line
                     onClick={() => removewishlistAPI(item._id)}
                     size={25}
-                    className=" text-gray-600 block font-bold cursor-pointer "
+                    className="text-gray-600 block font-bold cursor-pointer"
                   />
                 </span>
               </div>

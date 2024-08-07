@@ -7,38 +7,38 @@ export default function middleware(request: NextRequest) {
 
   console.log("Received cookies:", request.cookies);
 
-  let verify = request.cookies.get("loggedin")?.value;
-  console.log("Value of verify:", verify);
-  console.log(request.url);
+  // let verify = request.cookies.get("loggedin")?.value;
+  // console.log("Value of verify:", verify);
+  // console.log(request.url);
 
-  if (!verify && request.nextUrl.pathname === "/signup") {
-    console.log("Allowing access to /signup because user is not logged in");
-    return null;
-  }
-  if (
-    !verify &&
-    (request.nextUrl.pathname === "/home" ||
-      request.nextUrl.pathname === "/product")
-  ) {
-    console.log("Redirecting to / because verify is false or undefined");
-    return (
-      NextResponse.redirect(new URL("/", request.url)) ||
-      NextResponse.redirect(new URL("/login", request.url)) ||
-      NextResponse.redirect(new URL("/signup", request.url))
-    );
-  }
+  // if (!verify && request.nextUrl.pathname === "/signup") {
+  //   console.log("Allowing access to /signup because user is not logged in");
+  //   return null;
+  // }
+  // if (
+  //   !verify &&
+  //   (request.nextUrl.pathname === "/home" ||
+  //     request.nextUrl.pathname === "/product" || request.nextUrl.pathname === "/wishlist")
+  // ) {
+  //   console.log("Redirecting to / because verify is false or undefined");
+  //   return (
+  //     NextResponse.redirect(new URL("/", request.url)) ||
+  //     NextResponse.redirect(new URL("/login", request.url)) ||
+  //     NextResponse.redirect(new URL("/signup", request.url))
+  //   );
+  // }
 
-  if (
-    (verify &&
-      (request.nextUrl.pathname === "/" ||
-        request.nextUrl.pathname === "/login")) ||
-    request.nextUrl.pathname === "/signup"
-  ) {
-    console.log("Redirecting to /home because verify is true");
-    return (
-      NextResponse.redirect(new URL("/home", request.url)) ||
-      NextResponse.redirect(new URL("/productdesc", request.url))
-    );
-  }
-  return null; // Proceed to handle the request normally if no redirect is needed
+  // if (
+  //   (verify &&
+  //     (request.nextUrl.pathname === "/" ||
+  //       request.nextUrl.pathname === "/login")) ||
+  //   request.nextUrl.pathname === "/signup"
+  // ) {
+  //   console.log("Redirecting to /home because verify is true");
+  //   return (
+  //     NextResponse.redirect(new URL("/home", request.url))
+  //     // || NextResponse.redirect(new URL("/productdesc", request.url))
+  //   );
+  // }
+  // return null; // Proceed to handle the request normally if no redirect is needed
 }

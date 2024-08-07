@@ -77,7 +77,6 @@ export const addToCart = createAsyncThunk<void, string>(
   }
 );
 
-
 const wishlistSlice = createSlice({
   name: 'wish',
   initialState,

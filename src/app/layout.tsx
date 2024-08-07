@@ -54,7 +54,7 @@ export default function RootLayout({
   const pathname = usePathname();
 
   // condition layout - Pathname - Array
-  const display: any = ["/", "/SignUp"];
+  const display: any = ["/", "/signup"];
 
   return (
     <html lang="en">

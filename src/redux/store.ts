@@ -16,7 +16,6 @@ export const store = () => {
       products:productSlice,
       addwishlist:addWishlistSlice,
       cart:cartSlice,
-      
     },
     
   });

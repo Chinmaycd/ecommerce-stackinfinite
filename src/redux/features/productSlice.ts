@@ -59,19 +59,7 @@ export const fetchProducts = createAsyncThunk<
     return thunkAPI.rejectWithValue("Failed to fetch products");
   }
 });
-//add to wishlist
-// export const addToWishlist = createAsyncThunk<void, string, { rejectValue: string }>(
-//   "wishlist/addToWishlist",
-//   async (productId: string, thunkAPI) => {
-//     try {
-//       const userId = cookies.get("userid"); // Get userId from cookies
-//       const url = `${API_BASE_URL}/wishlist/add`;
-//       await axios.post(url, { userId, productId });
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue("Failed to add to wishlist");
-//     }
-//   }
-// );
+
 // Define your slice
 const productsSlice = createSlice({
   name: "products",

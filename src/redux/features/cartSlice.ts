@@ -29,13 +29,15 @@ const initialState: CartState = {
 // Fetch cart data async thunk
 export const fetchCartdata = createAsyncThunk(
   'fetchCartdata',
-  async () => {
+  
+  async (thunkAPI) => {
     const cookies = new Cookies();
     const userId = cookies.get("userid"); // Get userId from cookies
     const url = `${API_BASE_URL}/carts/products/${userId}`;
     try {
       const response = await axios.get<{ carts: Cart[]; totalPrice: number }>(url);
       return response.data;
+
     } catch (error) {
       throw new Error('Failed to fetch cart data');
     }

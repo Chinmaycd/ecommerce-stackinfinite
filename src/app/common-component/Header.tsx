@@ -10,9 +10,8 @@ import { IoSearch } from "react-icons/io5";
 import SearchModal from "./SearchModal";
 import { useRouter } from "next/navigation";
 import Cookies from "universal-cookie";
-import axios from "axios";
-import API_BASE_URL from "@/Apiconfig";
 import { FaRegHeart } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
 import { decrementCartItem, deleteCartItem, fetchCartdata, incrementCartItem } from "@/redux/features/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -20,10 +19,6 @@ const Header = () => {
   const router = useRouter();
   const [cartOpen, setCartOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false); // State for modal open/close
-  const [cartdata, setCartdata] = useState([]);
-  const [totalprice, setTotalprice] = useState();
-  const [decr, setDecr] = useState();
-  const [incr, setIncr] = useState();
   const cookies = new Cookies();
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -31,6 +26,7 @@ const Header = () => {
   const cart = useSelector((state:RootState)=>state.cart.cart)
    const totalPrice = useSelector((state: RootState) => state.cart.totalPrice);
   // console.log(cart);
+  // console.log(totalPrice);
   
   useEffect(() => {
     fetchData();
@@ -68,7 +64,7 @@ const Header = () => {
       )}
       {/* Pass modal state and close function to SearchModal */}
       <SearchModal isOpen={modalOpen} onClose={closeModal} />
-      <div className="w-[100%] flex justify-between items-center px-4 md:px-10 ">
+      <div className="w-[100%] flex justify-between items-center px-4 md:px-10 " >
         <div className="flex gap-3 items-center">
           <Image src="/logo.jpg" height={64} width={64} alt="logo" />
         </div>
@@ -106,9 +102,9 @@ const Header = () => {
 
           </span>
           <span>
-            <BiUser
+            <MdLogout
               size={25}
-              className="text-blue-900 cursor-pointer"
+              className="text-blue-900 cursor-pointer "
               onClick={Logout}
             />
           </span>
@@ -179,7 +175,7 @@ const Header = () => {
                     onClick={() => handleDecrement(item.productId)}
                     type="button"
                     className="bg-gray-100 w-12 h-8 font-semibold"
-                    disabled={item.quantity === 1}
+                    // disabled={item.quantity === 1}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
