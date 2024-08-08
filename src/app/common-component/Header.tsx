@@ -44,6 +44,8 @@ const Header = () => {
       });
   };
   // console.log(cartdata);
+  console.log(totalprice);
+  
   //delete from cart api
   const deletecartAPI = (productID: any) => {
     let url = `${API_BASE_URL}/carts/delete/${productID}`;
